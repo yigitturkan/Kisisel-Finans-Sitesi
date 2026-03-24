@@ -2,147 +2,107 @@
     ViewBag.Title = "AnaSayfa";
 }
 
-@* İlk Tanıtım Kutusu *@
-<section class="bg-light bg-gradient py-5 border-bottom">
-    <div class="container">
-        <div class="row align-items-center text-center">
+@* İlk Tanıtım Kutusu *@ <section class="bg-light bg-gradient py-5 border-bottom"> <div class="container"> <div class="row align-items-center text-center"> <div class="col-md-6"> <span class="badge bg-success-subtle text-success mb-3 px-3 py-2"> 💰 Akıllı Finans Yönetimi </span> <h1 class="display-4 fw-bold"> Paran Nereye Gidiyor Artık Bil. </h1> <p class="lead text-muted my-4"> Gelir ve giderlerini kolayca takip et, bütçeni yönet ve finansal kontrolü eline al. </p> <div class="mt-3"> <a href="@Url.Action("Register", "Account")" class="btn btn-outline-primary btn-lg px-4 me-2 shadow-sm"> Ücretsiz Başla </a> <a href="@Url.Action("Login", "Account")" class="btn btn-outline-dark btn-lg px-4"> Giriş Yap </a> </div> </div> <div class="col-md-6 text-center mt-4 mt-md-0"> <img src="https://picsum.photos/800/450" class="img-fluid rounded-4 shadow" alt="Finans Takibi" /> </div> </div> </div> </section>
 
-            <div class="col-md-6">
-                <span class="badge bg-success-subtle text-success mb-3 px-3 py-2">
-                    💰 Akıllı Finans Yönetimi
-                </span>
-
-                <h1 class="display-4 fw-bold">
-                    Paran Nereye Gidiyor Artık Bil.
-                </h1>
-
-                <p class="lead text-muted my-4">
-                    Gelir ve giderlerini kolayca takip et,
-                    bütçeni yönet ve finansal kontrolü eline al.
-                </p>
-
-                <div class="mt-3">
-                    <a href="@Url.Action("Register", "Account")" class="btn btn-outline-primary btn-lg px-4 me-2 shadow-sm">
-                        Ücretsiz Başla
-                    </a>
-                    <a href="@Url.Action("Login", "Account")" class="btn btn-outline-dark btn-lg px-4">
-                        Giriş Yap
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-md-6 text-center mt-4 mt-md-0">
-                <img src="https://picsum.photos/800/450"
-                     class="img-fluid rounded-4 shadow"
-                     alt="Finans Takibi" />
-            </div>
-
-        </div>
-    </div>
-</section>
-
-@* Site Tanıtım Kartları *@
 <section class="py-5">
     <div class="container text-center">
 
         <h2 class="fw-bold mb-2">Bu Site ile Neler Yapabilirsin?</h2>
-        <p class="text-muted mb-5">Finans yönetimini basitleştiren araçlar</p>
+        <p class="text-muted mb-5 fs-5">Finans yönetimini basitleştiren araçlar</p>
 
         <div class="row g-4">
 
+            <!-- Kart 1 -->
             <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 p-3 feature-card">
+                <div class="card h-100 border-0 rounded-4 p-4 shadow-sm text-center card-summary" id="card1">
                     <div class="card-body">
-                        <div class="fs-1 mb-3">💸</div>
-                        <h5 class="fw-bold">Harcama Takibi</h5>
-                        <p class="text-muted">
-                            Günlük gelir ve giderlerini hızlıca ekle ve düzenle.
+                        <div class="fs-1 mb-4">💸</div>
+                        <h4 class="fw-bold mb-3">Harcama Takibi</h4>
+                        <p class="text-muted fs-5 summary-text">
+                            Günlük gelir ve giderlerini hızlıca ekle ve düzenle...
                         </p>
-                        <a href="https://asp.net" class="btn btn-outline-primary btn-sm mt-2">Daha Fazla &raquo;</a>
+                        <button class="btn btn-outline-primary btn-lg mt-3"
+                                onclick="expandCard('card1')">
+                            Daha Fazla &raquo;
+                        </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Kart 2 -->
             <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 p-3 feature-card">
+                <div class="card h-100 border-0 rounded-4 p-4 shadow-sm text-center card-summary" id="card2">
                     <div class="card-body">
-                        <div class="fs-1 mb-3">📊</div>
-                        <h5 class="fw-bold">Raporlama</h5>
-                        <p class="text-muted">
-                            Harcamalarını grafiklerle detaylıca analiz et.
+                        <div class="fs-1 mb-4">📊</div>
+                        <h4 class="fw-bold mb-3">Raporlama</h4>
+                        <p class="text-muted fs-5 summary-text">
+                            Harcamalarını grafiklerle detaylıca analiz et...
                         </p>
-                        <a href="https://go.microsoft.com/fwlink/?LinkId=301865" class="btn btn-outline-primary btn-sm mt-2">Daha Fazla &raquo;</a>
+                        <button class="btn btn-outline-primary btn-lg mt-3"
+                                onclick="expandCard('card2')">
+                            Daha Fazla &raquo;
+                        </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Kart 3 -->
             <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 p-3 feature-card">
+                <div class="card h-100 border-0 rounded-4 p-4 shadow-sm text-center card-summary" id="card3">
                     <div class="card-body">
-                        <div class="fs-1 mb-3">🎯</div>
-                        <h5 class="fw-bold">Bütçe Yönetimi</h5>
-                        <p class="text-muted">
-                            Aylık limitler belirle ve harcamalarını aşmadan yönet.
+                        <div class="fs-1 mb-4">🎯</div>
+                        <h4 class="fw-bold mb-3">Bütçe Yönetimi</h4>
+                        <p class="text-muted fs-5 summary-text">
+                            Aylık limitler belirle ve harcamalarını aşmadan yönet...
                         </p>
-                        <a href="https://go.microsoft.com/fwlink/?LinkId=301866" class="btn btn-outline-primary btn-sm mt-2">Daha Fazla &raquo;</a>
+                        <button class="btn btn-outline-primary btn-lg mt-3"
+                                onclick="expandCard('card3')">
+                            Daha Fazla &raquo;
+                        </button>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-@* Nasıl Çalışır *@
-<section class="bg-light py-5">
-    <div class="container text-center">
+@* Nasıl Çalışır *@ <section class="bg-light py-5"> <div class="container text-center"> <h2 class="fw-bold mb-5">Nasıl Çalışır?</h2> <div class="row g-4"> <div class="col-md-4"> <div class="p-4"> <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:22px;"> 1 </div> <h5 class="fw-bold">Hesap Oluştur</h5> <p class="text-muted"> Ücretsiz kayıt ol ve hemen kullanmaya başla. </p> </div> </div> <div class="col-md-4"> <div class="p-4"> <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:22px;"> 2 </div> <h5 class="fw-bold">İşlemlerini Ekle</h5> <p class="text-muted"> Gelir ve giderlerini saniyeler içinde kaydet. </p> </div> </div> <div class="col-md-4"> <div class="p-4"> <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:22px;"> 3 </div> <h5 class="fw-bold">Analiz Et</h5> <p class="text-muted"> Grafiklerle finansal durumunu net şekilde gör. </p> </div> </div> </div> </div> </section>
 
-        <h2 class="fw-bold mb-5">Nasıl Çalışır?</h2>
+<!-- Modal gibi büyüyen kart scripti -->
+@section Scripts {
+    <script>
+        function expandCard(cardId) {
+            const card = document.getElementById(cardId);
+            // Diğer kartları resetle
+            document.querySelectorAll('.card-summary').forEach(c => {
+                if (c.id !== cardId) {
+                    c.style.transform = 'scale(1)';
+                    c.style.zIndex = '0';
+                }
+            });
 
-        <div class="row g-4">
+            // Büyüt ve öne getir
+            card.style.transition = 'all 0.3s';
+            card.style.transform = 'scale(1.3)';
+            card.style.zIndex = '10';
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            <div class="col-md-4">
-                <div class="p-4">
-                    <div class="bg-success text-white rounded-circle d-inline-flex
-                                align-items-center justify-content-center mb-3"
-                         style="width:60px;height:60px;font-size:22px;">
-                        1
-                    </div>
-                    <h5 class="fw-bold">Hesap Oluştur</h5>
-                    <p class="text-muted">
-                        Ücretsiz kayıt ol ve hemen kullanmaya başla.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="p-4">
-                    <div class="bg-success text-white rounded-circle d-inline-flex
-                                align-items-center justify-content-center mb-3"
-                         style="width:60px;height:60px;font-size:22px;">
-                        2
-                    </div>
-                    <h5 class="fw-bold">İşlemlerini Ekle</h5>
-                    <p class="text-muted">
-                        Gelir ve giderlerini saniyeler içinde kaydet.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="p-4">
-                    <div class="bg-success text-white rounded-circle d-inline-flex
-                                align-items-center justify-content-center mb-3"
-                         style="width:60px;height:60px;font-size:22px;">
-                        3
-                    </div>
-                    <h5 class="fw-bold">Analiz Et</h5>
-                    <p class="text-muted">
-                        Grafiklerle finansal durumunu net şekilde gör.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
+            // Metni tam göster
+            const p = card.querySelector('.summary-text');
+            if (card.dataset.expanded !== 'true') {
+                if (cardId === 'card1') p.textContent = 'Günlük gelir ve giderlerini hızlıca ekle ve düzenle. Detaylı rapor alabilir ve bütçeni optimize edebilirsin.';
+                if (cardId === 'card2') p.textContent = 'Harcamalarını grafiklerle detaylıca analiz et ve ay bazında gelir-gider dengesini gör.';
+                if (cardId === 'card3') p.textContent = 'Aylık limitler belirle, harcamalarını aşmadan yönet ve finansal hedeflerine ulaş.';
+                card.dataset.expanded = 'true';
+            } else {
+                // Tekrar özet konuma al
+                if (cardId === 'card1') p.textContent = 'Günlük gelir ve giderlerini hızlıca ekle ve düzenle...';
+                if (cardId === 'card2') p.textContent = 'Harcamalarını grafiklerle detaylıca analiz et...';
+                if (cardId === 'card3') p.textContent = 'Aylık limitler belirle ve harcamalarını aşmadan yönet...';
+                card.dataset.expanded = 'false';
+                card.style.transform = 'scale(1)';
+                card.style.zIndex = '0';
+            }
+        }
+    </script>
+}

@@ -1,5 +1,5 @@
-24.03.2026 Tarihi - Salı Günü - 10:42
----------------------------------------------------------------------------------
+24.03.2026 Tarihi - Salı Günü 
+----------------------------------------------------------------------------------
 	- Projenin gihub depo sıkıntısı düzeltildi!
 	- Ziyaretçi kısımları artık komple çalışıyor. Anasayfadaki index içindeki butonlar - navbar ve footerdaki butonlar çalışıyor (Sadece sosyal medya butonları boş!)
 	- Kullanıcı giriş yapabiliyor. Giriş yaptığında direk dashboarda atıyor. Demo grafikler gözüküyor.
@@ -8,4 +8,13 @@
 Yapılacaklar:
 	- Merhaba! yigit.trkkan2003@gmail.com kısmına bastığımızda profil ayarları kısmı geliyor. ama boş bişi yapılmıyor onu düzelt!
 	- Burayı düzeltirken aynı zamanda Merhaba yanındaki epostayı orda yazdığımız şekilde isim ve soyisimi ekle!
-	- Css ve js yi ayrı dosyalara aktar! /Content -> Css - /Script -> JavaScript
+	- Css ve js yi ayrı dosyalara aktar! /Content -> Css - /Script -> JavaScript	👍
+		- _Layouttaki css _Layout.css e aktarıldı     @Styles.Render("~/Content/_Layout.css") 👌
+		- Featuresteki css Features.css e aktarıldı     @Styles.Render("~/Content/Features.css") 👌
+		- Login.cshtml deki js Login.js ye aktarıldı         <script src="~/Scripts/Login.js"></script>👌
+
+
+Bugün Yapılanlar:
+	- Eposta ile link gönderilebiliyor. Ancak şuan sadece DEBUG'a geliyor link. o linki al kopyala yapıştır yeni şifren ile giriş yapabiliyorsun.
+	- AnaSayfadaki Bu site ile neler yapabilirsin kartları butonlarına basınca büyüyor içindeki metnin devamı okunabiliyor.
+

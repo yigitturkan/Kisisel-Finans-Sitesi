@@ -1,0 +1,46 @@
+﻿
+.nav-hover {
+	position: relative;
+	transition: 0.3s;
+	font-weight: 500;
+}
+
+.nav-hover:hover {
+	color: #0d6efd !important;
+}
+
+.nav-hover::after {
+	content: "";
+	position: absolute;
+	width: 0%;
+	height: 2px;
+	left: 0;
+	bottom: 0;
+	background-color: #0d6efd;
+	transition: 0.3s;
+}
+
+.nav-hover:hover::after {
+	width: 100%;
+}
+
+.footer-link {
+	color: #adb5bd;
+	text-decoration: none;
+	transition: 0.3s;
+}
+
+	.footer-link:hover {
+		color: #ffffff;
+		padding-left: 5px;
+	}
+
+.social-icon {
+	color: #adb5bd;
+	margin-right: 12px;
+	transition: 0.3s;
+}
+
+	.social-icon:hover {
+		color: #0d6efd;
+	}

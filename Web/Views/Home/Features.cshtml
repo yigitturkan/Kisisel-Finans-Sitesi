@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Ozellikler";
+    @Styles.Render("~/Content/Features.css")
 }
 
 <!-- HEADER -->
@@ -121,16 +122,3 @@
         </a>
     </div>
 </section>
-
-
-<!-- SMALL STYLE -->
-<style>
-    .feature-card {
-        transition: all 0.3s ease;
-    }
-
-        .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-</style>
