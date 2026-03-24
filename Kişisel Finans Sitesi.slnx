@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Business/Business.csproj" Id="e2694382-700c-4d9c-8909-775486c96ede" />
+  <Project Path="Core/Core.csproj" Id="cb59bbb4-6de9-4447-8cf6-d646bf5851ab" />
+  <Project Path="Data/Data.csproj" Id="49300d1c-5302-401b-a788-c398dd38fb9e" />
+  <Project Path="Utils/Utils.csproj" Id="05cebe68-6761-4853-b5ef-d99e2160a97a" />
+  <Project Path="Web/Web.csproj" Id="ee66b14f-808d-4251-a853-7111dba60980" />
+</Solution>

@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "Ozellikler";
+}
+
+<!-- HEADER -->
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h1 class="fw-bold">Özellikler</h1>
+        <p class="text-muted fs-5">
+            Finansal yönetimi kolaylaştıran güçlü araçlar.
+        </p>
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="py-5">
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- Feature 1 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">💸</div>
+                        <h5 class="fw-bold">Harcama Takibi</h5>
+                        <p class="text-muted">
+                            Gelir ve giderlerini kolayca ekle,
+                            tüm işlemlerini tek ekranda yönet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">📊</div>
+                        <h5 class="fw-bold">Detaylı Analizler</h5>
+                        <p class="text-muted">
+                            Harcamalarını grafiklerle analiz et
+                            ve finansal alışkanlıklarını keşfet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">🎯</div>
+                        <h5 class="fw-bold">Bütçe Yönetimi</h5>
+                        <p class="text-muted">
+                            Kategori bazlı bütçeler oluştur,
+                            harcamalarını kontrol altında tut.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">🏦</div>
+                        <h5 class="fw-bold">Çoklu Hesap</h5>
+                        <p class="text-muted">
+                            Nakit, banka ve kart hesaplarını
+                            ayrı ayrı takip et.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">🔔</div>
+                        <h5 class="fw-bold">Akıllı Bildirimler</h5>
+                        <p class="text-muted">
+                            Bütçe aşımı ve önemli işlemler için
+                            anlık bilgilendirme al.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm feature-card">
+                    <div class="card-body text-center p-4">
+                        <div class="fs-1 mb-3">🔒</div>
+                        <h5 class="fw-bold">Güvenli Veri</h5>
+                        <p class="text-muted">
+                            Tüm bilgiler modern güvenlik
+                            standartlarıyla korunur.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CTA -->
+<section class="bg-light py-5 text-center">
+    <div class="container">
+        <h3 class="fw-bold">Finansal kontrolü eline almaya hazır mısın?</h3>
+        <p class="text-muted">Başlamak sadece birkaç saniye sürer.</p>
+
+        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg mt-2">
+            Ücretsiz Başla
+        </a>
+    </div>
+</section>
+
+
+<!-- SMALL STYLE -->
+<style>
+    .feature-card {
+        transition: all 0.3s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+</style>

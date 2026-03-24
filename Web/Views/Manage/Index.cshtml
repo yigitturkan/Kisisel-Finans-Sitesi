@@ -1,0 +1,181 @@
+﻿@model Web.Models.IndexViewModel
+@{
+    ViewBag.Title = "Profil Yönetimi";
+}
+<main aria-labelledby="title" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 id="title" class="fw-bold mb-4">Profil Yönetimi</h2>
+            <p class="text-success">@ViewBag.StatusMessage</p>
+
+            <!-- Profil Bilgileri Kartı -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-user me-2"></i>
+                        Kişisel Bilgiler
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Ad</label>
+                            <p class="text-muted">@(ViewBag.FirstName ?? "Belirtilmemiş")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Soyadı</label>
+                            <p class="text-muted">@(ViewBag.LastName ?? "Belirtilmemiş")</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">E-posta</label>
+                            <p class="text-muted">@(ViewBag.Email ?? "Belirtilmemiş")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Telefon Numarası</label>
+                            <p class="text-muted">@(Model.PhoneNumber ?? "Belirtilmemiş")</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Doğum Tarihi</label>
+                            <p class="text-muted">@(ViewBag.DateOfBirth != null ? Convert.ToDateTime(ViewBag.DateOfBirth).ToString("dd.MM.yyyy") : "Belirtilmemiş")</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="@Url.Action("EditProfile", "Manage")" class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-pen-to-square me-1"></i>
+                            Bilgileri Düzenle
+                        </a>
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#changePhoneModal">
+                                <i class="fa-solid fa-phone me-1"></i>
+                                Telefon Değiştir
+                            </button>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("AddPhoneNumber", "Manage")" class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-phone me-1"></i>
+                                Telefon Ekle
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hesap Güvenliği Kartı -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-lock me-2"></i>
+                        Hesap Güvenliği
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <!-- Parola -->
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <h6 class="mb-1 fw-semibold">Parola</h6>
+                                <small class="text-muted">Parolanızı değiştirin ve hesabınızı güvenli tutun</small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                @if (Model.HasPassword)
+                                {
+                                    <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-outline-primary btn-sm">
+                                        Değiştir
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("SetPassword", "Manage")" class="btn btn-outline-primary btn-sm">
+                                        Oluştur
+                                    </a>
+                                }
+                                <a href="@Url.Action("ForgotPassword", "Account")" class="btn btn-outline-warning btn-sm">
+                                    <i class="fa-solid fa-key me-1"></i>
+                                    Sıfırla
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Dış Oturum Açmalar -->
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <h6 class="mb-1 fw-semibold">Dış Oturum Açmalar</h6>
+                                <small class="text-muted">@Model.Logins.Count bağlantılı hesap</small>
+                            </div>
+                            <a href="@Url.Action("ManageLogins", "Manage")" class="btn btn-outline-primary btn-sm">
+                                Yönet
+                            </a>
+                        </div>
+
+                        <!-- İki Öğeli Kimlik Doğrulama -->
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <h6 class="mb-1 fw-semibold">İki Öğeli Kimlik Doğrulama</h6>
+                                <small class="text-muted">
+                                    @if (Model.TwoFactor)
+                                    {
+                                        <span class="badge bg-success">Etkin</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Devre Dışı</span>
+                                    }
+                                </small>
+                            </div>
+                            <div>
+                                @if (Model.TwoFactor)
+                                {
+                                    <form method="post" action="@Url.Action("DisableTwoFactorAuthentication", "Manage")" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            Devre Dışı Bırak
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" action="@Url.Action("EnableTwoFactorAuthentication", "Manage")" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                            Etkinleştir
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Tarayıcı Hatırlanması -->
+                        @if (Model.BrowserRemembered)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">Tarayıcı Hatırlanması</h6>
+                                    <small class="text-muted">Bu tarayıcıda iki öğeli doğrulama atlanacak</small>
+                                </div>
+                                <form method="post" action="@Url.Action("ForgetBrowser", "Manage")" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-warning btn-sm">
+                                        Unut
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

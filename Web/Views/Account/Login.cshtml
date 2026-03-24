@@ -1,0 +1,91 @@
+﻿@using Web.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Giriş Yap";
+}
+
+<section class="bg-gradient d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-body p-4">
+
+                        <h2 class="fw-bold text-center mb-4">Giriş Yap</h2>
+
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger small mb-3" })
+
+                            <!-- EMAIL -->
+                            <div class="mb-3">
+                                @Html.LabelFor(m => m.Email, "Email", new { @class = "form-label w-100 text-start" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control w-100", placeholder = "Eposta adresinizi girin..." })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <!-- PASSWORD -->
+                            <div class="mb-3">
+                                @Html.LabelFor(m => m.Password, "Şifre", new { @class = "form-label w-100 text-start" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control w-100", placeholder = "*****" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <!-- REMEMBER -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input", id = "RememberMe" })
+                                    @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label small" })
+                                </div>
+
+                                @Html.ActionLink("Şifremi Unuttum?", "ForgotPassword", "Account", null, new { @class = "text-decoration-none small" })
+                            </div>
+
+                            <!-- BUTTON -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">Giriş Yap</button>
+                            </div>
+
+                            <p class="text-center mt-3 small">
+                                Hesabınız yok mu?
+                                @Html.ActionLink("Kayıt Ol", "Register", "Account", null, new { @class = "text-decoration-none" })
+                            </p>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Hatırlanan mail
+            const rememberedEmail = localStorage.getItem('userEmail');
+            if (rememberedEmail) {
+                $('#Email').val(rememberedEmail);
+                $('#RememberMe').prop('checked', true);
+            }
+
+            // Submit
+            $('form').on('submit', function () {
+                const rememberMe = $('#RememberMe').is(':checked');
+                const email = $('#Email').val();
+
+                if (rememberMe) {
+                    localStorage.setItem('userEmail', email);
+                } else {
+                    localStorage.removeItem('userEmail');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Finans Takip</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        .nav-hover {
+            position: relative;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+            .nav-hover:hover {
+                color: #0d6efd !important;
+            }
+
+            .nav-hover::after {
+                content: "";
+                position: absolute;
+                width: 0%;
+                height: 2px;
+                left: 0;
+                bottom: 0;
+                background-color: #0d6efd;
+                transition: 0.3s;
+            }
+
+            .nav-hover:hover::after {
+                width: 100%;
+            }
+
+        .footer-link {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+            .footer-link:hover {
+                color: #ffffff;
+                padding-left: 5px;
+            }
+
+        .social-icon {
+            color: #adb5bd;
+            margin-right: 12px;
+            transition: 0.3s;
+        }
+
+            .social-icon:hover {
+                color: #0d6efd;
+            }
+    </style>
+</head>
+<body>
+
+    <header class="container-fluid bg-light bg-gradient py-4">
+        <h1 class="text-center text-capitalize text-decoration-underline">Kişisel Finans Takip</h1>
+        <p class="lead text-muted text-center">Finansal Kontrol Senin Elinde</p>
+    </header>
+
+    <nav >
+        <div>
+                @Html.Partial("_LoginPartial")
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        @RenderBody()
+    </main>
+
+    <footer class="container-fluid bg-dark text-white pt-5 pb-3 bg-gradient">
+        <div class="container">
+
+            <div class="row text-center text-md-start">
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">
+                        <i class="fa-solid fa-wallet text-primary me-2"></i>
+                        FinansTakip
+                    </h5>
+                    <p class="text-secondary small">
+                        Kişisel finans yönetimini kolaylaştıran modern bir takip platformu.
+                    </p>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h6 class="fw-bold">Bağlantılar</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="@Url.Action("Index", "Home")" class="footer-link">Ana Sayfa</a></li>
+                        <li><a href="@Url.Action("About", "Home")" class="footer-link">Hakkımızda</a></li>
+                        <li><a href="@Url.Action("Features", "Home")" class="footer-link">Özellikler</a></li>
+                        <li><a href="@Url.Action("SSS", "Home")" class="footer-link">SSS</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")" class="footer-link">İletişim</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h6 class="fw-bold">Bizi Takip Edin</h6>
+                    <div class="fs-4">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="border-secondary">
+
+            <div class="text-center small text-secondary">
+                <p class="mb-1">&copy; @DateTime.Now.Year Kişisel Finans Takip — Tüm Hakları Saklıdır.</p>
+                <span>Versiyon: V1.0.0</span>
+            </div>
+
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

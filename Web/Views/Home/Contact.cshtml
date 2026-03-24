@@ -1,0 +1,112 @@
+﻿    
+@{
+    ViewBag.Title = "İletisim";
+}
+
+<!-- HEADER -->
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h1 class="fw-bold">İletişim</h1>
+        <p class="text-muted fs-5">
+            Sorularınız veya geri bildirimleriniz için bize ulaşabilirsiniz.
+        </p>
+    </div>
+</section>
+
+
+<!-- CONTACT SECTION -->
+<section class="py-5">
+    <div class="container">
+
+        <div class="row g-5">
+
+            <!-- FORM -->
+            <div class="col-lg-7">
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-4">Mesaj Gönder</h4>
+
+                        <form>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ad Soyad</label>
+                                <input type="text" class="form-control" placeholder="Adınızı giriniz">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Email adresiniz">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mesaj</label>
+                                <textarea class="form-control" rows="5" placeholder="Mesajınızı yazın"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                Mesaj Gönder
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT INFO -->
+            <div class="col-lg-5">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-4">İletişim Bilgileri</h4>
+
+                        <p class="mb-3">
+                            <i class="fa-solid fa-envelope text-primary me-2"></i>
+                            destek@finanstakip.com
+                        </p>
+
+                        <p class="mb-3">
+                            <i class="fa-solid fa-location-dot text-primary me-2"></i>
+                            İstanbul, Türkiye
+                        </p>
+
+                        <p class="mb-4">
+                            <i class="fa-solid fa-clock text-primary me-2"></i>
+                            7/24 Destek
+                        </p>
+
+                        <hr>
+
+                        <h6 class="fw-bold mb-3">Bizi Takip Edin</h6>
+
+                        <div class="d-flex gap-3 fs-4">
+                            <a href="#" class="text-dark"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="text-dark"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" class="text-dark"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CTA -->
+<section class="bg-light py-5 text-center">
+    <div class="container">
+        <h3 class="fw-bold">Finansal kontrolü eline almaya hazır mısın?</h3>
+        <a href="@Url.Action("KayitOl", "Account")" class="btn btn-success btn-lg mt-3">
+            Ücretsiz Başla
+        </a>
+    </div>
+</section>

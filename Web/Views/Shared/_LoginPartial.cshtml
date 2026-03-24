@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNet.Identity
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light bg-gradient shadow-sm py-3">
+    <div class="container">
+
+        <p class="navbar-brand fw-bold">
+            <i class="fa-solid fa-wallet me-2 text-primary"></i>
+            FinansTakip
+        </p>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    @Html.ActionLink("Ana Sayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link nav-hover" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Hakkımızda", "About", "Home", new { area = "" }, new { @class = "nav-link nav-hover" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Özellikler", "Features", "Home", new { area = "" }, new { @class = "nav-link nav-hover" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Sık Sorulan Sorular", "SSS", "Home", new { area = "" }, new { @class = "nav-link nav-hover" })
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2 align-items-center">
+                @if (Request.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post,
+                        new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <span class="navbar-text me-2 small">
+                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
+                            @Html.ActionLink("Merhaba, " + User.Identity.GetUserName() + "!",
+                                "Index", "Manage", null,
+                                new
+                                     {
+                                         @class = "text-decoration-none text-dark fw-semibold",
+                                      title = "Profilin'in Ayarlarını Ayarla!"
+                                     })
+                        </span>
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Çıkış Yap
+                        </button>
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Giriş Yap", "Login", "Account", null,
+                        new { @class = "btn btn-outline-primary" })
+                    @Html.ActionLink("Kayıt Ol", "Register", "Account", null,
+                        new { @class = "btn btn-primary" })
+                }
+            </div>
+
+        </div>
+    </div>
+</nav>

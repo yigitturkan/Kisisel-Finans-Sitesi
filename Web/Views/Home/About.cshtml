@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Hakkımızda";
+}
+<section class="py-5 bg-light bg-gradient">
+    <div class="container">
+
+        <!-- Başlık -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Hakkımızda</h1>
+            <p class="text-muted fs-5">
+                Finansal yönetimi herkes için daha kolay hale getiriyoruz.
+            </p>
+        </div>
+
+        <!-- Görsel -->
+        <div class="text-center mb-5">
+            <img src="~/İmages/Ekip.png"
+                 class="img-fluid rounded shadow"
+                 alt="Finans yönetimi">
+        </div>
+
+        <!-- Tanıtım -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+
+                <p class="lead">
+                    Finansal farkındalık, sağlıklı bir geleceğin temelidir.
+                    Bu platformu geliştirirken amacımız kişisel finans yönetimini
+                    herkes için daha anlaşılır ve ulaşılabilir hale getirmekti.
+                </p>
+
+                <p class="text-muted">
+                    Günlük hayatın yoğunluğu içinde harcamaları takip etmek,
+                    bütçe oluşturmak ve finansal hedefler belirlemek çoğu zaman zor olabilir.
+                    Platformumuz tüm gelir ve giderlerinizi tek bir yerde toplayarak
+                    finansal durumunuzu daha net görmenizi sağlar.
+                </p>
+
+                <p class="text-muted">
+                    Amacımız karmaşık finans araçları yerine herkesin kolayca kullanabileceği sade ve anlaşılır bir sistem sunmaktır. Böylece kullanıcılarımız harcamalarını analiz edebilir, bütçelerini kontrol edebilir ve geleceğe daha bilinçli finansal kararlarla ilerleyebilir.
+                </p>
+
+                <p class="text-muted">
+                    Gizlilik ve güvenlik bizim için en önemli önceliklerden biridir. Kullanıcı verileri modern güvenlik standartlarıyla korunur ve hiçbir şekilde üçüncü taraflarla paylaşılmaz.
+                </p>
+
+            </div>
+        </div>
+
+        <!-- Misyon / Vizyon -->
+        <div class="row text-center g-4">
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-3">Misyonumuz</h4>
+
+                        <p class="text-muted mb-0">
+                            İnsanların finansal durumlarını daha iyi anlamalarına yardımcı olmak
+                            ve bütçe yönetimini basit, erişilebilir ve etkili hale getirmek.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-3">Vizyonumuz</h4>
+
+                        <p class="text-muted mb-0">
+                            Teknolojiyi kullanarak bireylerin finansal farkındalığını artıran
+                            ve herkesin finansal kontrolünü eline almasını sağlayan
+                            güvenilir bir platform olmak.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Değerler -->
+        <div class="row text-center mt-5 g-4">
+
+            <div class="col-md-4">
+                <h5 class="fw-bold">🔒 Güvenlik</h5>
+                <p class="text-muted">
+                    Kullanıcı verileri güvenli şekilde korunur.
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="fw-bold">⚡ Basitlik</h5>
+                <p class="text-muted">
+                    Karmaşık finans araçları yerine sade bir deneyim sunarız.
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="fw-bold">📈 Gelişim</h5>
+                <p class="text-muted">
+                    Platform sürekli gelişerek kullanıcılarına daha iyi çözümler sunar.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <div class="text-center mt-5 bg-light">
+        <h3 class="fw-bold">Finansal kontrolü eline almaya hazır mısın?</h3>
+        <a href="@Url.Action("Register","Account")" class="btn btn-primary btn-lg mt-3">
+            Ücretsiz Başla
+        </a>
+    </div>
+</section>
