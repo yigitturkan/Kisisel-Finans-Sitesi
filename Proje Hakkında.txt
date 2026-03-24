@@ -1,0 +1,11 @@
+24.03.2026 Tarihi - Salı Günü - 10:42
+---------------------------------------------------------------------------------
+	- Projenin gihub depo sıkıntısı düzeltildi!
+	- Ziyaretçi kısımları artık komple çalışıyor. Anasayfadaki index içindeki butonlar - navbar ve footerdaki butonlar çalışıyor (Sadece sosyal medya butonları boş!)
+	- Kullanıcı giriş yapabiliyor. Giriş yaptığında direk dashboarda atıyor. Demo grafikler gözüküyor.
+
+
+Yapılacaklar:
+	- Merhaba! yigit.trkkan2003@gmail.com kısmına bastığımızda profil ayarları kısmı geliyor. ama boş bişi yapılmıyor onu düzelt!
+	- Burayı düzeltirken aynı zamanda Merhaba yanındaki epostayı orda yazdığımız şekilde isim ve soyisimi ekle!
+	- Css ve js yi ayrı dosyalara aktar! /Content -> Css - /Script -> JavaScript
