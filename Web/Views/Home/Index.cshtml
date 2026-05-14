@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "AnaSayfa";
+}
+<section class="bg-light bg-gradient py-5 border-bottom">
+    @Html.Partial("~/Views/Home/Partials/Index/_PromotionCard1.cshtml")
+</section>
+
+<section class="py-5">
+    @Html.Partial("~/Views/Home/Partials/Index/_PromotionCard2.cshtml")
+</section>
+
+<section class="bg-light py-5">
+    @Html.Partial("~/Views/Home/Partials/Index/_PromotionCard3.cshtml")
+</section>
+
+<!-- Modal gibi büyüyen kart scripti -->
+@section Scripts {
+    <script>
+        function expandCard(cardId) {
+            const card = document.getElementById(cardId);
+            // Diğer kartları resetle
+            document.querySelectorAll('.card-summary').forEach(c => {
+                if (c.id !== cardId) {
+                    c.style.transform = 'scale(1)';
+                    c.style.zIndex = '0';
+                }
+            });
+
+            // Büyüt ve öne getir
+            card.style.transition = 'all 0.3s';
+            card.style.transform = 'scale(1.3)';
+            card.style.zIndex = '10';
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Metni tam göster
+            const p = card.querySelector('.summary-text');
+            if (card.dataset.expanded !== 'true') {
+                if (cardId === 'card1') p.textContent = 'Günlük gelir ve giderlerini hızlıca ekle ve düzenle. Detaylı rapor alabilir ve bütçeni optimize edebilirsin.';
+                if (cardId === 'card2') p.textContent = 'Harcamalarını grafiklerle detaylıca analiz et ve ay bazında gelir-gider dengesini gör.';
+                if (cardId === 'card3') p.textContent = 'Aylık limitler belirle, harcamalarını aşmadan yönet ve finansal hedeflerine ulaş.';
+                card.dataset.expanded = 'true';
+            } else {
+                // Tekrar özet konuma al
+                if (cardId === 'card1') p.textContent = 'Günlük gelir ve giderlerini hızlıca ekle ve düzenle...';
+                if (cardId === 'card2') p.textContent = 'Harcamalarını grafiklerle detaylıca analiz et...';
+                if (cardId === 'card3') p.textContent = 'Aylık limitler belirle ve harcamalarını aşmadan yönet...';
+                card.dataset.expanded = 'false';
+                card.style.transform = 'scale(1)';
+                card.style.zIndex = '0';
+            }
+        }
+    </script>
+}

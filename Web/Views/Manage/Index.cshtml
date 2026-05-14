@@ -1,0 +1,90 @@
+﻿@model Web.Models.IndexViewModel
+@{
+    ViewBag.Title = "Profil Yönetimi";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<main class="container-xxl container-p-y">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="fw-bold mb-0">Profil Ayarları</h2>
+                <span class="badge bg-label-primary">Hesap Durumu: Aktif</span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm text-center border-0">
+                        <div class="card-body p-5">
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="@(ViewBag.ProfilePicture ?? "/assets/img/avatars/1.png")"
+                                     alt="Profil Fotoğrafı"
+                                     class="rounded-circle img-thumbnail shadow-sm"
+                                     style="width: 150px; height: 150px; object-fit: cover;"
+                                     onerror="this.src='/assets/img/avatars/1.png';">
+                            </div>
+                            <h5 class="fw-bold mb-1">@(ViewBag.FirstName ?? "Ad") @(ViewBag.LastName ?? "Soyad")</h5>
+                            <p class="text-muted small">@ViewBag.UserEmail</p>
+                            <hr>
+                            <div class="d-grid">
+                                <a href="@Url.Action("EditProfile", "Manage")" class="btn btn-outline-primary btn-sm">
+                                    <i class="bx bx-camera me-1"></i> Fotoğrafı Değiştir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
+                            <h5 class="mb-0 fw-bold text-primary">Kişisel Bilgiler</h5>
+                            <a href="@Url.Action("EditProfile", "Manage")" class="btn btn-primary btn-sm">
+                                <i class="bx bx-edit-alt me-1"></i> Düzenle
+                            </a>
+                        </div>
+                        <div class="card-body py-4">
+                            <div class="row mb-4">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label class="text-muted small text-uppercase fw-bold">Ad</label>
+                                    <p class="fs-6 mb-0">@(ViewBag.FirstName ?? "Belirtilmemiş")</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted small text-uppercase fw-bold">Soyadı</label>
+                                    <p class="fs-6 mb-0">@(ViewBag.LastName ?? "Belirtilmemiş")</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label class="text-muted small text-uppercase fw-bold">E-Posta</label>
+                                    <p class="fs-6 mb-0">@ViewBag.UserEmail</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="text-muted small text-uppercase fw-bold">Doğum Tarihi</label>
+                                    <p class="fs-6 mb-0">@(ViewBag.DateOfBirth != null ? Convert.ToDateTime(ViewBag.DateOfBirth).ToString("dd MMMM yyyy") : "Belirtilmemiş")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-bottom">
+                            <h5 class="mb-0 fw-bold text-danger">Hesap Güvenliği</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom mb-3">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Parola</h6>
+                                    <small class="text-muted">Güvenliğiniz için düzenli güncelleyin</small>
+                                </div>
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-label-danger btn-sm">Değiştir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

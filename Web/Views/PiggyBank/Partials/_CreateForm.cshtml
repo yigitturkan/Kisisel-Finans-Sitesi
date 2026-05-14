@@ -1,0 +1,20 @@
+﻿<div id="newPiggyForm" class="card mb-4 shadow-sm" style="display:none; border: 1px solid #696cff;">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Kumbara Detayları</h5>
+        @using (Html.BeginForm("Create", "PiggyBank", FormMethod.Post))
+        {
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" name="Name" class="form-control" placeholder="Kumbara Adı (Örn: Tatil)" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" step="0.01" name="TargetAmount" class="form-control" placeholder="Hedef Tutar" required>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-success w-100">Oluştur</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('newPiggyForm').style.display='none'">İptal</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

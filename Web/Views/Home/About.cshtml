@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Hakkımızda";
+}
+<section class="py-5 bg-light bg-gradient">
+    <div class="container">
+
+        <!-- Başlık -->
+        @Html.Partial("~/Views/Home/Partials/About/_Title.cshtml")
+
+        <!-- Görsel -->
+        @Html.Partial("~/Views/Home/Partials/About/_Image.cshtml")
+
+        <!-- Tanıtım -->
+        @Html.Partial("~/Views/Home/Partials/About/_Promotion.cshtml")
+
+        <!-- Misyon / Vizyon -->
+        @Html.Partial("~/Views/Home/Partials/About/_MissionVision.cshtml")
+
+        <!-- Değerler -->
+        @Html.Partial("~/Views/Home/Partials/About/_Values.cshtml")
+
+    </div>
+    @Html.Partial("~/Views/Home/Partials/About/_RegisterCTA.cshtml")
+</section>

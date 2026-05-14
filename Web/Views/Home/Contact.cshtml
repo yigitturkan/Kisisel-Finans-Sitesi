@@ -1,0 +1,32 @@
+﻿    
+@{
+    ViewBag.Title = "İletisim";
+}
+
+<!-- HEADER -->
+<section class="py-5 bg-light text-center">
+    @Html.Partial("~/Views/Home/Partials/Contact/_Header.cshtml")
+</section>
+
+
+<!-- CONTACT SECTION -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- FORM -->
+            @Html.Partial("~/Views/Home/Partials/Contact/_Form.cshtml")
+
+            <!-- CONTACT INFO -->
+            @Html.Partial("~/Views/Home/Partials/Contact/_Info.cshtml")
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CTA -->
+<section class="bg-light py-5 text-center">
+          @Html.Partial("~/Views/Home/Partials/Contact/_CTA.cshtml")
+</section>

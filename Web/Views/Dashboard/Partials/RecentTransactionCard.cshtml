@@ -1,0 +1,45 @@
+﻿@model Core.Concrete.DTOs.DashboardDto
+
+<div class="col-lg-8 mb-4">
+    <div class="card border-0 shadow-sm h-100">
+        <div class="card-header d-flex align-items-center justify-content-between bg-transparent">
+            <h5 class="card-title m-0"><i class="bx bx-list-ul me-2 text-primary"></i>Son İşlemler</h5>
+            <small class="text-muted">Ayrıntı için satıra tıkla</small>
+        </div>
+        <div class="table-responsive text-nowrap p-2">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>İşlem</th>
+                        <th>Tutar</th>
+                        <th class="text-center">Tür</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RecentTransactions != null && Model.RecentTransactions.Any())
+                    {
+                        foreach (var item in Model.RecentTransactions)
+                        {
+                            <tr onclick="showDetail('@item.Description', '@item.Amount.ToString("N2")', '@item.Type', '@item.Date.ToShortDateString()')"
+                                style="cursor: pointer;">
+                                <td>
+                                    <i class="bx @(item.Type == "Gelir" ? "bx-badge-check text-success" : "bx-minus-circle text-danger") me-2"></i>
+                                    @item.Description
+                                </td>
+                                <td class="fw-bold @(item.Type == "Gelir" ? "text-success" : "text-danger")">
+                                    @(item.Type == "Gelir" ? "+" : "-") ₺@item.Amount.ToString("N2")
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge @(item.Type == "Gelir" ? "bg-label-success" : "bg-label-danger")">@item.Type</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="3" class="text-center py-5 text-muted">Henüz işlem yok.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

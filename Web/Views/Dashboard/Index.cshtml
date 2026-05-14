@@ -1,0 +1,84 @@
+﻿@model Core.Concrete.DTOs.DashboardDto
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="container-xxl container-p-y">
+    <div class="row mb-4">
+        @Html.Partial("~/Views/Dashboard/Partials/UserCard.cshtml")
+    </div>
+
+    <div class="row mb-4">
+        @Html.Partial("~/Views/Dashboard/Partials/İncomeExpenseCards.cshtml")
+    </div>
+    <div class="row">
+        @Html.Partial("~/Views/Dashboard/Partials/RecentTransactionCard.cshtml")
+    </div>
+
+    <div class="col-lg-4">
+        @Html.Partial("~/Views/Dashboard/Partials/CategoryCard.cshtml")
+
+        @Html.Partial("~/Views/Dashboard/Partials/GeminiAıAriesCard.cshtml")
+    </div>
+</div>
+
+<script>
+    function showDetail(desc, amount, type, date) {
+        Swal.fire({
+            title: 'İşlem Detayı',
+            html: `
+                <div class="text-start mt-3">
+                    <p><strong>Açıklama:</strong> ${desc}</p>
+                    <p><strong>Tutar:</strong> ₺${amount}</p>
+                    <p><strong>Tür:</strong> ${type}</p>
+                    <p><strong>Tarih:</strong> ${date}</p>
+                </div>
+            `,
+            icon: type === 'Gelir' ? 'success' : 'error',
+            confirmButtonText: 'Kapat',
+            confirmButtonColor: '#696cff'
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const tips = [
+            "Gelirinin %20'sini 'gelecekteki sen' için ayırmayı unutma.",
+            "Küçük harcamalar büyük delikler açar. Kahve masrafını hesapla!",
+            "İsteklerinle ihtiyaçlarını karıştırma. 24 saat kuralını uygula.",
+            "Net değerini her ay takip et. Nereye gittiğini bilmek zorundasın.",
+            "Aylık bütçe yapmadan para yönetimi olmaz.",
+            "Harcamalarını kategorilere ayır, kontrol kolaylaşır.",
+            "Acil durum fonu oluşturmak finansal güvenin temelidir.",
+            "Kredi kartını değil, bütçeni yönet.",
+            "Tasarruf etmek maaşla değil alışkanlıkla ilgilidir.",
+            "Küçük birikimler zamanla büyük fark yaratır.",
+            "Gelir artarsa harcamayı değil, birikimi artır.",
+            "İndirim var diye ihtiyacın olmayan şeyi alma.",
+            "Önce kendine ödeme yap: birikimi başta ayır.",
+            "Borçlarını küçükten büyüğe kapatmayı dene (snowball yöntemi).",
+            "Günlük harcamalarını not almak farkındalığını artırır.",
+            "Aboneliklerini kontrol et, kullanmadıklarını iptal et.",
+            "Yatırım yapmadan önce temel finans bilgisini öğren.",
+            "Tek gelire bağlı kalma, ek gelir yolları düşün.",
+            "Lüks harcamaları ödül olarak kullan, alışkanlık haline getirme.",
+            "Finansal hedeflerin yoksa para da yönsüz gider.",
+            "Her ay sonunda harcama analizi yap.",
+            "Nakit akışını anlamadan zenginleşemezsin.",
+            "Uzun vadeli düşün, kısa vadeli heveslere kapılma.",
+            "Paranı yönetmezsen, o seni yönetir.",
+            "Tasarruf bir ceza değil, özgürlüktür."
+        ];
+
+        const tipElement = document.getElementById("ai-tip-text");
+        const btnElement = document.getElementById("get-new-tip");
+
+        function showRandomTip() {
+            const randomIndex = Math.floor(Math.random() * tips.length);
+            tipElement.innerText = '"' + tips[randomIndex] + '"';
+        }
+
+        showRandomTip();
+        btnElement.addEventListener("click", showRandomTip);
+    });
+</script>

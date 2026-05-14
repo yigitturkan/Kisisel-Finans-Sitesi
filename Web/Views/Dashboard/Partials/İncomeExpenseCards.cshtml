@@ -1,0 +1,50 @@
+﻿<div class="col-md-4 mb-3">
+    <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="avatar-initial rounded bg-label-success p-2"><i class="bx bx-trending-up fs-3"></i></span>
+                </div>
+                <span class="fw-semibold d-block text-muted">TOPLAM GELİR</span>
+            </div>
+            <h3 class="card-title mb-2 text-success fw-bold">₺@(Model?.TotalIncome.ToString("N2") ?? "0.00")</h3>
+            <a href="@Url.Action("AddIncome", "Transaction")" class="btn btn-sm btn-outline-success w-100 rounded-pill mt-2">
+                <i class="bx bx-plus"></i> Hızlı Gelir Ekle
+            </a>
+        </div>
+    </div>
+</div>
+<div class="col-md-4 mb-3">
+    <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="avatar-initial rounded bg-label-danger p-2"><i class="bx bx-trending-down fs-3"></i></span>
+                </div>
+                <span class="fw-semibold d-block text-muted">TOPLAM GİDER</span>
+            </div>
+            <h3 class="card-title mb-2 text-danger fw-bold">₺@(Model?.TotalExpense.ToString("N2") ?? "0.00")</h3>
+            <a href="@Url.Action("AddExpense", "Transaction")" class="btn btn-sm btn-outline-danger w-100 rounded-pill mt-2">
+                <i class="bx bx-plus"></i> Hızlı Gider Ekle
+            </a>
+        </div>
+    </div>
+</div>
+<div class="col-md-4 mb-3">
+    <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="avatar-initial rounded bg-label-primary p-2"><i class="bx bx-wallet fs-3"></i></span>
+                </div>
+                <span class="fw-semibold d-block text-muted">NET BAKİYE</span>
+            </div>
+            <h3 class="card-title mb-2 fw-bold @(Model?.Balance >= 0 ? "text-primary" : "text-danger")">
+                ₺@(Model?.Balance.ToString("N2") ?? "0.00")
+            </h3>
+            <div class="progress mt-3" style="height: 8px;">
+                <div class="progress-bar @(Model?.Balance >= 0 ? "bg-primary" : "bg-danger")" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Ozellikler";
+    @Styles.Render("~/Content/Features.css")
+}
+
+<!-- HEADER -->
+<section class="py-5 bg-light text-center">
+    @Html.Partial("~/Views/Home/Partials/Features/_Headers.cshtml")
+</section>
+
+
+<!-- FEATURES -->
+<section class="py-5">
+    @Html.Partial("~/Views/Home/Partials/Features/_Cards.cshtml")
+</section>
+
+
+<!-- CTA -->
+<section class="bg-light py-5 text-center">
+    @Html.Partial("~/Views/Home/Partials/Features/_CTA.cshtml")
+</section>

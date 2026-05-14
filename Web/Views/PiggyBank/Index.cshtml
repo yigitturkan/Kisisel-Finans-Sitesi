@@ -1,0 +1,35 @@
+﻿@using System.Linq
+@model IEnumerable<Core.Concrete.Entities.PiggyBank>
+
+@{
+    ViewBag.Title = "Kumbaralarım";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+
+    ViewBag.UserName = User.Identity?.Name ?? "Kullanıcı";
+    ViewBag.ProfileImage = ViewBag.ProfileImage ?? "/assets/img/avatars/1.png";
+}
+
+<div class="container mt-4">
+    @Html.Partial("~/Views/PiggyBank/Partials/_BalanceCard.cshtml")
+
+    @Html.Partial("~/Views/PiggyBank/Partials/_Header.cshtml")
+
+    @Html.Partial("~/Views/PiggyBank/Partials/_CreateForm.cshtml")
+
+    @Html.Partial("~/Views/PiggyBank/Partials/_List.cshtml")
+</div>
+
+<style>
+    .bg-label-primary {
+        background-color: #e7e7ff !important;
+        color: #696cff !important;
+        padding: 15px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .input-group-merge .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+</style> 

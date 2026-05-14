@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Core.Concrete.Entities.PiggyBank>
+
+<div class="row">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <i class="bx bx-info-circle display-1 text-light mb-3"></i>
+            <p class="text-muted">Henüz bir kumbaranız yok. Biriktirmeye başlamak için yeni bir tane oluşturun!</p>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center p-4">
+                        <div class="avatar avatar-lg bg-label-primary mx-auto mb-3">
+                            <i class="bx bx-piggy-bank fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1">@item.Name</h4>
+                        <p class="text-muted small mb-3">Hedef: @item.TargetAmount.ToString("N2") ₺</p>
+
+                        <div class="bg-light rounded p-3 mb-4">
+                            <h2 class="text-success mb-0 fw-bold">@item.CurrentAmount.ToString("N2") ₺</h2>
+                            <small class="text-uppercase fw-semibold">Biriken Miktar</small>
+                        </div>
+
+                        <div class="d-flex flex-column gap-2">
+                            @using (Html.BeginForm("Add", "PiggyBank", FormMethod.Post))
+                            {
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <div class="input-group input-group-merge">
+                                    <input type="number" step="0.01" name="amount" class="form-control" placeholder="Tutar Gir" required />
+                                    <button type="submit" class="btn btn-primary">At</button>
+                                </div>
+                            }
+
+                            @using (Html.BeginForm("Withdraw", "PiggyBank", FormMethod.Post))
+                            {
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <div class="input-group input-group-merge">
+                                    <input type="number" step="0.01" name="amount" class="form-control" placeholder="Tutar Gir" required />
+                                    <button type="submit" class="btn btn-outline-danger">Geri Al</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

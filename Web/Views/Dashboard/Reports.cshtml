@@ -1,0 +1,983 @@
+﻿@model Web.Models.ReportViewModel
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Raporlar";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var tr = new System.Globalization.CultureInfo("tr-TR");
+    var topCategory = Model.CategoryBreakdown?.OrderByDescending(x => x.Total).FirstOrDefault();
+    bool hasData = Model.MonthlyHistory != null && Model.MonthlyHistory.Any(x => x.TotalIncome > 0 || x.TotalExpense > 0);
+
+    decimal totalIncome = Model.MonthlyHistory?.Sum(x => x.TotalIncome) ?? 0;
+    decimal totalExpense = Model.MonthlyHistory?.Sum(x => x.TotalExpense) ?? 0;
+    decimal totalNet = Model.MonthlyHistory?.Sum(x => x.Net) ?? 0;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --bg: #f0f2f7;
+        --surface: #ffffff;
+        --surface2: #f7f8fc;
+        --border: #e8eaf0;
+        --text: #0d1117;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --accent-lt: #eff4ff;
+        --green: #16a34a;
+        --green-lt: #f0fdf4;
+        --red: #dc2626;
+        --red-lt: #fff1f2;
+        --amber: #d97706;
+        --amber-lt: #fffbeb;
+        --radius: 14px;
+        --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+    }
+
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .rp {
+        padding: 28px 24px;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    .card-p {
+        padding: 24px;
+    }
+
+    .topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .topbar-title {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -.4px;
+    }
+
+    .topbar-meta {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 4px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        padding: 20px 22px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+    }
+
+    .stat-label {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+    }
+
+    .stat-val {
+        font-family: 'DM Mono', monospace;
+        font-size: 26px;
+        font-weight: 500;
+    }
+
+    .stat-icon {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .stat-income {
+        background: var(--green-lt);
+        border-color: #bbf7d0;
+    }
+
+    .stat-expense {
+        background: var(--red-lt);
+        border-color: #fecaca;
+    }
+
+    .stat-net {
+        background: var(--accent-lt);
+        border-color: #bfdbfe;
+    }
+
+    .stat-income .stat-val {
+        color: var(--green);
+    }
+
+    .stat-expense .stat-val {
+        color: var(--red);
+    }
+
+    .stat-net .stat-val {
+        color: var(--accent);
+    }
+
+    .filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+        .filter-bar select, .filter-bar .fbtn {
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+            .filter-bar select:focus {
+                outline: none;
+                border-color: var(--accent);
+            }
+
+    .fbtn-filter {
+        background: var(--accent) !important;
+        color: #fff !important;
+        border-color: var(--accent) !important;
+        font-weight: 600;
+        padding: 0 20px;
+    }
+
+        .fbtn-filter:hover {
+            background: #1d4ed8 !important;
+        }
+
+    .fbtn-pdf {
+        background: var(--surface2) !important;
+        margin-left: auto;
+        display: flex !important;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .fbtn-pdf:hover {
+            background: var(--border) !important;
+        }
+
+        .fbtn-pdf:disabled {
+            opacity: .5;
+            cursor: wait;
+        }
+
+    .chart-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+
+    .tab-btn {
+        padding: 8px 18px;
+        border-radius: 9px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all .18s;
+        color: var(--muted);
+    }
+
+        .tab-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            background: var(--text);
+            color: #fff;
+            border-color: var(--text);
+        }
+
+    .chart-wrap {
+        position: relative;
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-pane {
+        display: none;
+        width: 100%;
+    }
+
+        .chart-pane.visible {
+            display: block;
+            animation: fadeUp .3s ease;
+        }
+
+    .pie-wrap {
+        max-width: 380px;
+        margin: 0 auto;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .highlight-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        background: var(--amber-lt);
+        border: 1px solid #fde68a;
+        border-radius: var(--radius);
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+        .highlight-bar span {
+            font-weight: 600;
+            color: var(--amber);
+        }
+
+    .tx-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+    }
+
+        .tx-table thead th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tx-table tbody tr {
+            transition: background .12s;
+        }
+
+            .tx-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+        .tx-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .tx-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .badge {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 6px;
+        font-size: 11.5px;
+        font-weight: 600;
+    }
+
+    .badge-income {
+        background: var(--green-lt);
+        color: var(--green);
+    }
+
+    .badge-expense {
+        background: var(--red-lt);
+        color: var(--red);
+    }
+
+    .amount-income {
+        color: var(--green);
+        font-family: 'DM Mono', monospace;
+        font-weight: 500;
+    }
+
+    .amount-expense {
+        color: var(--red);
+        font-family: 'DM Mono', monospace;
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+    }
+
+        .empty-state .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+        }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .section-hd {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    @@media (max-width: 768px) {
+        .rp {
+            padding: 16px 14px;
+        }
+
+        .two-col {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .fbtn-pdf {
+            margin-left: 0 !important;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="rp" id="report-root">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div>
+            <div class="topbar-title">📊 Finans Raporu</div>
+            <div class="topbar-meta">Donem: <strong>@Model.PeriodLabel</strong> &nbsp;&middot;&nbsp; @ViewBag.UserName</div>
+        </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <form method="get" action="@Url.Action("Reports","Dashboard")" style="display:contents">
+            <select name="year">
+                @foreach (var y in Model.AvailableYears)
+                {
+                    <option value="@y" @(y == Model.SelectedYear ? "selected" : "")>@y</option>
+                }
+            </select>
+
+            <select name="month">
+                <option value="0" @(Model.SelectedMonth == 0 ? "selected" : "")>Tum Yil</option>
+                @{
+                    var aylar = new[] { "", "Ocak", "Subat", "Mart", "Nisan", "Mayis", "Haziran",
+                                        "Temmuz", "Agustos", "Eylul", "Ekim", "Kasim", "Aralik" };
+                }
+                @for (int m = 1; m <= 12; m++)
+                {
+                    <option value="@m" @(Model.SelectedMonth == m ? "selected" : "")>@aylar[m]</option>
+                }
+            </select>
+
+            <button type="submit" class="fbtn fbtn-filter">Filtrele</button>
+        </form>
+
+        <button class="fbtn fbtn-pdf" id="pdfBtn" onclick="downloadPDF()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            PDF Indir
+        </button>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+        <div class="stat-card stat-income">
+            <div class="stat-icon">💰</div>
+            <div class="stat-label">Toplam Gelir</div>
+            <div class="stat-val">₺@totalIncome.ToString("N2", tr)</div>
+        </div>
+        <div class="stat-card stat-expense">
+            <div class="stat-icon">💸</div>
+            <div class="stat-label">Toplam Gider</div>
+            <div class="stat-val">₺@totalExpense.ToString("N2", tr)</div>
+        </div>
+        <div class="stat-card stat-net">
+            <div class="stat-icon">📈</div>
+            <div class="stat-label">Net Bakiye</div>
+            <div class="stat-val">₺@totalNet.ToString("N2", tr)</div>
+        </div>
+    </div>
+
+    <!-- TOP CATEGORY -->
+    @if (topCategory != null)
+    {
+        <div class="highlight-bar">
+            🔥 Bu donemde en cok harcama:
+            <span>@topCategory.Category</span>
+            — ₺@topCategory.Total.ToString("N2", tr)
+        </div>
+    }
+
+    <!-- CHARTS -->
+    <div class="card card-p" style="margin-bottom:20px;">
+        <div class="section-hd">📉 Grafikler</div>
+        <div class="chart-tabs">
+            <button class="tab-btn active" id="tab-line" onclick="showChart('line')">Gelir / Gider</button>
+            <button class="tab-btn" id="tab-pie" onclick="showChart('pie')">Kategori Dagilimi</button>
+            <button class="tab-btn" id="tab-bar" onclick="showChart('bar')">Net Bakiye</button>
+        </div>
+        <div class="chart-wrap">
+            @if (!hasData)
+            {
+                <div class="empty-state">
+                    <div class="emoji">📭</div>
+                    <h4>Bu donem icin veri bulunamadi</h4>
+                    <p>Secili donemde henuz gelir veya gider kaydi yok.</p>
+                </div>
+            }
+            else
+            {
+                <div class="chart-pane visible" id="pane-line"><canvas id="lineChart"></canvas></div>
+                <div class="chart-pane" id="pane-pie"><div class="pie-wrap"><canvas id="pieChart"></canvas></div></div>
+                <div class="chart-pane" id="pane-bar"><canvas id="barChart"></canvas></div>
+            }
+        </div>
+    </div>
+
+    <!-- TWO COL -->
+    @if (Model.CategoryBreakdown != null && Model.CategoryBreakdown.Any())
+    {
+        <div class="two-col">
+            <div class="card card-p">
+                <div class="section-hd">🗂️ Kategori Dagilimi</div>
+                @foreach (var cat in Model.CategoryBreakdown.OrderByDescending(x => x.Total))
+                {
+                    var pct = totalExpense > 0 ? (double)cat.Total / (double)totalExpense * 100 : 0;
+                    <div style="margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                            <span>@cat.Category</span>
+                            <span style="font-family:'DM Mono',monospace;color:var(--red)">₺@cat.Total.ToString("N0", tr)</span>
+                        </div>
+                        <div style="height:6px;border-radius:99px;background:var(--border);overflow:hidden;">
+                            <div style="height:100%;width:@(pct.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%;background:var(--red);border-radius:99px;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="card card-p">
+                <div class="section-hd">📅 Aylik Ozet</div>
+                @if (Model.MonthlyHistory != null)
+                {
+                    foreach (var row in Model.MonthlyHistory.Where(x => x.TotalIncome > 0 || x.TotalExpense > 0))
+                    {
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                            <span style="font-weight:600;min-width:80px;">@row.MonthLabel</span>
+                            <span style="color:var(--green);font-family:'DM Mono',monospace;">+@row.TotalIncome.ToString("N0", tr)</span>
+                            <span style="color:var(--red);font-family:'DM Mono',monospace;">-@row.TotalExpense.ToString("N0", tr)</span>
+                            <span style="color:@(row.Net >= 0 ? "var(--accent)" : "var(--red)");font-family:'DM Mono',monospace;font-weight:600;">₺@row.Net.ToString("N0", tr)</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+
+    <!-- TRANSACTION TABLE -->
+    <div class="card" style="margin-bottom:20px;">
+        <div class="card-p" style="padding-bottom:0;">
+            <div class="section-hd">🧾 Islem Gecmisi</div>
+        </div>
+        @if (Model.Transactions == null || !Model.Transactions.Any())
+        {
+            <div class="empty-state">
+                <div class="emoji">🗒️</div>
+                <h4>Kayit bulunamadi</h4>
+                <p>Secili doneme ait islem bulunmuyor.</p>
+            </div>
+        }
+        else
+        {
+            <div style="overflow-x:auto;">
+                <table class="tx-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Aciklama</th>
+                            <th>Kategori</th>
+                            <th>Tur</th>
+                            <th style="text-align:right;">Tutar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tx in Model.Transactions.OrderByDescending(x => x.Date))
+                        {
+                            <tr>
+                                <td style="color:var(--muted);font-size:12.5px;">@tx.Date.ToString("dd MMM yyyy", tr)</td>
+                                <td style="font-weight:500;">@tx.Description</td>
+                                <td>@tx.Category</td>
+                                <td><span class="badge @(tx.IsIncome ? "badge-income" : "badge-expense")">@(tx.IsIncome ? "Gelir" : "Gider")</span></td>
+                                <td style="text-align:right;" class="@(tx.IsIncome ? "amount-income" : "amount-expense")">
+                                    @(tx.IsIncome ? "+" : "-")₺@tx.Amount.ToString("N2", tr)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+</div>
+
+<!-- ═══ CHART DATA ═══ -->
+<script>
+    const labels    = @Html.Raw(JsonConvert.SerializeObject(Model.MonthlyHistory?.Select(x => x.MonthLabel)          ?? Enumerable.Empty<string>()));
+    const income    = @Html.Raw(JsonConvert.SerializeObject(Model.MonthlyHistory?.Select(x => (double)x.TotalIncome)  ?? Enumerable.Empty<double>()));
+    const expense   = @Html.Raw(JsonConvert.SerializeObject(Model.MonthlyHistory?.Select(x => (double)x.TotalExpense) ?? Enumerable.Empty<double>()));
+    const net       = @Html.Raw(JsonConvert.SerializeObject(Model.MonthlyHistory?.Select(x => (double)x.Net)          ?? Enumerable.Empty<double>()));
+    const catLabels = @Html.Raw(JsonConvert.SerializeObject(Model.CategoryBreakdown?.Select(x => x.Category)          ?? Enumerable.Empty<string>()));
+    const catValues = @Html.Raw(JsonConvert.SerializeObject(Model.CategoryBreakdown?.Select(x => (double)x.Total)     ?? Enumerable.Empty<double>()));
+
+    /* PDF icin Razor verilerini aktar */
+    const PDF_META = {
+        company : "FinansApp",
+        user    : "@Html.Raw((ViewBag.UserName ?? "").ToString().Replace("\"",""))",
+        period  : "@Html.Raw((Model.PeriodLabel ?? "").ToString().Replace("\"",""))",
+        income  : "@totalIncome.ToString("N2", tr)",
+        expense : "@totalExpense.ToString("N2", tr)",
+        net     : "@totalNet.ToString("N2", tr)",
+        netPos  : @((totalNet >= 0).ToString().ToLower())
+    };
+
+    const PDF_CATEGORIES = @Html.Raw(JsonConvert.SerializeObject(
+    (Model.CategoryBreakdown ?? new List<Web.Models.CategorySummary>())
+        .OrderByDescending(x => x.Total)
+        .Select(x => new { cat = x.Category, total = x.Total })
+    ));
+
+const PDF_TRANSACTIONS = @Html.Raw(JsonConvert.SerializeObject(
+    (Model.Transactions ?? new List<Web.Models.ReportTransaction>())
+        .OrderByDescending(x => x.Date)
+        .Select(x => new {
+            date = x.Date.ToString("dd.MM.yyyy"),
+            desc = x.Description,
+            cat  = x.Category,
+            type = x.IsIncome ? "Gelir" : "Gider",
+            sign = x.IsIncome ? "+" : "-",
+            amt  = x.Amount
+        })
+));
+
+const PDF_MONTHLY = @Html.Raw(JsonConvert.SerializeObject(
+    (Model.MonthlyHistory ?? new List<Web.Models.MonthSummary>())
+        .Where(x => x.TotalIncome > 0 || x.TotalExpense > 0)
+        .Select(x => new {
+            label   = x.MonthLabel,
+            income  = x.TotalIncome,
+            expense = x.TotalExpense,
+            net     = x.Net,
+            netPos  = x.Net >= 0
+        })
+));
+</script>
+
+<!-- ═══ CHART.JS ═══ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    /* Global instances — destroy() ile canvas yeniden kullanilabilir */
+    let chartLine = null, chartPie = null, chartBar = null;
+
+    const PIE_COLORS = ["#2563eb", "#16a34a", "#dc2626", "#d97706", "#7c3aed",
+        "#0891b2", "#db2777", "#65a30d", "#9333ea", "#0284c7"];
+
+    const BASE_SCALE = {
+        x: { ticks: { font: { family: "'DM Sans'" }, color: "#6b7280" }, grid: { color: "#e8eaf0" } },
+        y: {
+            ticks: {
+                font: { family: "'DM Mono'" }, color: "#6b7280",
+                callback: v => "\u20BA" + v.toLocaleString("tr-TR")
+            },
+            grid: { color: "#e8eaf0" }
+        }
+    };
+    const TIP_MONEY = {
+        callbacks: { label: ctx => " \u20BA" + ctx.parsed.y.toLocaleString("tr-TR", { minimumFractionDigits: 2 }) }
+    };
+
+    function buildCharts() {
+        const lcEl = document.getElementById("lineChart");
+        if (!lcEl) return;  /* veri yoksa canvas yok */
+
+        /* Eski instance'lari yok et */
+        if (chartLine) { chartLine.destroy(); chartLine = null; }
+        if (chartPie) { chartPie.destroy(); chartPie = null; }
+        if (chartBar) { chartBar.destroy(); chartBar = null; }
+
+        /* Line */
+        chartLine = new Chart(lcEl, {
+            type: "line",
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: "Gelir", data: income, borderColor: "#16a34a", backgroundColor: "rgba(22,163,74,.08)",
+                        borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: "#16a34a", tension: .35, fill: true
+                    },
+                    {
+                        label: "Gider", data: expense, borderColor: "#dc2626", backgroundColor: "rgba(220,38,38,.06)",
+                        borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: "#dc2626", tension: .35, fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true, animation: { duration: 400 },
+                plugins: { legend: { labels: { font: { family: "'DM Sans'", size: 13 }, color: "#0d1117" } }, tooltip: TIP_MONEY },
+                scales: BASE_SCALE
+            }
+        });
+
+        /* Pie/Doughnut */
+        chartPie = new Chart(document.getElementById("pieChart"), {
+            type: "doughnut",
+            data: {
+                labels: catLabels,
+                datasets: [{ data: catValues, backgroundColor: PIE_COLORS, borderWidth: 2, borderColor: "#fff" }]
+            },
+            options: {
+                responsive: true, animation: { duration: 400 }, cutout: "60%",
+                plugins: {
+                    legend: { position: "bottom", labels: { font: { family: "'DM Sans'" }, padding: 14, color: "#0d1117" } },
+                    tooltip: { callbacks: { label: ctx => " \u20BA" + ctx.parsed.toLocaleString("tr-TR", { minimumFractionDigits: 2 }) } }
+                }
+            }
+        });
+
+        /* Bar */
+        const netColors = net.map(v => v >= 0 ? "rgba(37,99,235,.75)" : "rgba(220,38,38,.75)");
+        chartBar = new Chart(document.getElementById("barChart"), {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [{ label: "Net Bakiye", data: net, backgroundColor: netColors, borderRadius: 6, borderSkipped: false }]
+            },
+            options: {
+                responsive: true, animation: { duration: 400 },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => " \u20BA" + ctx.parsed.y.toLocaleString("tr-TR", { minimumFractionDigits: 2 }) } }
+                },
+                scales: BASE_SCALE
+            }
+        });
+    }
+
+    function showChart(type) {
+        document.querySelectorAll(".chart-pane").forEach(el => el.classList.remove("visible"));
+        document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+        document.getElementById("pane-" + type).classList.add("visible");
+        document.getElementById("tab-" + type).classList.add("active");
+        /* Display:none olan canvas'larda boyut sifir olabilir, resize tetikle */
+        requestAnimationFrame(() => {
+            if (type === "pie" && chartPie) chartPie.resize();
+            if (type === "bar" && chartBar) chartBar.resize();
+            if (type === "line" && chartLine) chartLine.resize();
+        });
+    }
+
+    buildCharts();
+</script>
+
+<!-- ═══ PDF — Programatik jsPDF ═══ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    async function downloadPDF() {
+        const btn = document.getElementById("pdfBtn");
+        btn.disabled = true;
+        btn.textContent = "Olusturuluyor...";
+
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF("p", "mm", "a4");
+            const W = 210, H = 297, ML = 14, MR = 14, TW = W - ML - MR;
+
+            /* ── Yardimci ── */
+            function sf(style, size, r, g, b) {
+                doc.setFont("helvetica", style || "normal");
+                doc.setFontSize(size || 10);
+                if (r !== undefined) doc.setTextColor(r, g, b);
+                else doc.setTextColor(13, 17, 23);
+            }
+            function hLine(y, r, g, b) {
+                doc.setDrawColor(r || 232, g || 234, b || 240);
+                doc.line(ML, y, W - MR, y);
+            }
+            function pageHeader() {
+                doc.setFillColor(13, 17, 23);
+                doc.rect(0, 0, W, 12, "F");
+                sf("normal", 7, 200, 205, 215);
+                doc.text("FinansApp  |  " + PDF_META.period, ML, 8);
+                sf("normal", 7, 120, 125, 135);
+                doc.text(PDF_META.user, W - MR, 8, { align: "right" });
+            }
+
+            /* ════════════════════════
+               SAYFA 1 — OZET
+            ════════════════════════ */
+            /* Kapak bandi */
+            doc.setFillColor(13, 17, 23);
+            doc.rect(0, 0, W, 42, "F");
+
+            sf("bold", 20, 255, 255, 255);
+            doc.text("FINANS RAPORU", ML, 20);
+
+            sf("normal", 9, 160, 165, 175);
+            doc.text(PDF_META.company + "   |   " + PDF_META.user + "   |   " + PDF_META.period, ML, 31);
+
+            sf("normal", 7, 100, 108, 120);
+            const today = new Date().toLocaleDateString("tr-TR");
+            doc.text("Olusturuldu: " + today, W - MR, 31, { align: "right" });
+
+            let y = 56;
+
+            /* --- Ozet Baslik --- */
+            sf("bold", 13);
+            doc.text("Donem Ozeti", ML, y); y += 5;
+            hLine(y); y += 8;
+
+            /* 3 Ozet Kutu */
+            const bw = (TW - 8) / 3;
+            const bxDefs = [
+                {
+                    label: "TOPLAM GELIR", val: "+" + PDF_META.income + " TL",
+                    bg: [240, 253, 244], bd: [187, 247, 208], fc: [22, 163, 74]
+                },
+                {
+                    label: "TOPLAM GIDER", val: "-" + PDF_META.expense + " TL",
+                    bg: [255, 241, 242], bd: [254, 202, 202], fc: [220, 38, 38]
+                },
+                {
+                    label: "NET BAKIYE",
+                    val: (PDF_META.netPos ? "+" : "") + PDF_META.net + " TL",
+                    bg: [239, 244, 255], bd: [191, 219, 254],
+                    fc: PDF_META.netPos ? [37, 99, 235] : [220, 38, 38]
+                }
+            ];
+            bxDefs.forEach((b, i) => {
+                const bx = ML + i * (bw + 4);
+                doc.setFillColor(...b.bg); doc.setDrawColor(...b.bd);
+                doc.roundedRect(bx, y, bw, 30, 3, 3, "FD");
+                sf("bold", 7, 107, 114, 128);
+                doc.text(b.label, bx + 5, y + 9);
+                sf("bold", 14, ...b.fc);
+                doc.text(b.val, bx + 5, y + 23);
+            });
+            y += 40;
+
+            /* --- Kategori Tablosu --- */
+            if (PDF_CATEGORIES.length > 0) {
+                sf("bold", 12);
+                doc.text("Kategori Dagilimi", ML, y); y += 5;
+                hLine(y); y += 8;
+
+                doc.setFillColor(247, 248, 252);
+                doc.rect(ML, y - 4, TW, 8, "F");
+                sf("bold", 7, 107, 114, 128);
+                doc.text("KATEGORI", ML + 4, y + 1);
+                doc.text("TUTAR (TL)", W - MR - 4, y + 1, { align: "right" });
+                y += 9;
+
+                for (let i = 0; i < PDF_CATEGORIES.length; i++) {
+                    const c = PDF_CATEGORIES[i];
+                    if (y > H - 20) { doc.addPage(); pageHeader(); y = 20; }
+                    if (i % 2 === 0) { doc.setFillColor(252, 252, 254); doc.rect(ML, y - 4, TW, 8, "F"); }
+                    sf("normal", 9);
+                    doc.text(c.cat, ML + 4, y + 1);
+                    sf("bold", 9, 220, 38, 38);
+                    doc.text(c.total, W - MR - 4, y + 1, { align: "right" });
+                    hLine(y + 4, 240, 242, 247);
+                    y += 9;
+                }
+                y += 6;
+            }
+
+            /* --- Aylik Ozet --- */
+            if (PDF_MONTHLY.length > 0) {
+                if (y > H - 60) { doc.addPage(); pageHeader(); y = 20; }
+                sf("bold", 12);
+                doc.text("Aylik Ozet", ML, y); y += 5;
+                hLine(y); y += 8;
+
+                const cAy = ML + 2, cGel = ML + 46, cGid = ML + 95, cNet = ML + 144;
+                doc.setFillColor(247, 248, 252);
+                doc.rect(ML, y - 4, TW, 8, "F");
+                sf("bold", 7, 107, 114, 128);
+                doc.text("AY", cAy, y + 1);
+                doc.text("GELIR", cGel, y + 1);
+                doc.text("GIDER", cGid, y + 1);
+                doc.text("NET", cNet, y + 1);
+                y += 9;
+
+                for (let i = 0; i < PDF_MONTHLY.length; i++) {
+                    const r = PDF_MONTHLY[i];
+                    if (y > H - 20) { doc.addPage(); pageHeader(); y = 20; }
+                    if (i % 2 === 0) { doc.setFillColor(252, 252, 254); doc.rect(ML, y - 4, TW, 8, "F"); }
+                    sf("bold", 9); doc.text(r.label, cAy, y + 1);
+                    sf("normal", 9, 22, 163, 74); doc.text("+" + r.income, cGel, y + 1);
+                    sf("normal", 9, 220, 38, 38); doc.text("-" + r.expense, cGid, y + 1);
+                    sf("bold", 9, ...(r.netPos ? [37, 99, 235] : [220, 38, 38]));
+                    doc.text((r.netPos ? "+" : "") + r.net, cNet, y + 1);
+                    hLine(y + 4, 240, 242, 247);
+                    y += 9;
+                }
+            }
+
+            /* ════════════════════════
+               SAYFA 2+ — ISLEMLER
+            ════════════════════════ */
+            if (PDF_TRANSACTIONS.length > 0) {
+                doc.addPage(); pageHeader(); y = 22;
+
+                sf("bold", 12);
+                doc.text("Islem Gecmisi", ML, y); y += 5;
+                hLine(y); y += 8;
+
+                /* Kolon pozisyonlari */
+                const cDate = ML + 2, cDesc = ML + 28, cCat = ML + 84, cType = ML + 122, cAmt = W - MR - 2;
+
+                function txHeader() {
+                    doc.setFillColor(13, 17, 23);
+                    doc.rect(ML, y - 4, TW, 9, "F");
+                    sf("bold", 7, 200, 205, 215);
+                    doc.text("TARIH", cDate, y + 1.5);
+                    doc.text("ACIKLAMA", cDesc, y + 1.5);
+                    doc.text("KATEGORI", cCat, y + 1.5);
+                    doc.text("TUR", cType, y + 1.5);
+                    doc.text("TUTAR", cAmt, y + 1.5, { align: "right" });
+                    y += 10;
+                }
+                txHeader();
+
+                for (let i = 0; i < PDF_TRANSACTIONS.length; i++) {
+                    const tx = PDF_TRANSACTIONS[i];
+
+                    if (y > H - 16) {
+                        doc.addPage(); pageHeader(); y = 18;
+                        txHeader();
+                    }
+
+                    if (i % 2 === 0) { doc.setFillColor(247, 248, 252); doc.rect(ML, y - 4, TW, 8, "F"); }
+
+                    const isInc = tx.type === "Gelir";
+                    sf("normal", 8, 107, 114, 128);
+                    doc.text(tx.date, cDate, y + 0.5);
+
+                    sf("normal", 8);
+                    const d = tx.desc && tx.desc.length > 26 ? tx.desc.substring(0, 24) + ".." : (tx.desc || "-");
+                    doc.text(d, cDesc, y + 0.5);
+
+                    sf("normal", 8, 107, 114, 128);
+                    const ct = tx.cat && tx.cat.length > 14 ? tx.cat.substring(0, 12) + ".." : (tx.cat || "-");
+                    doc.text(ct, cCat, y + 0.5);
+
+                    sf("bold", 7, ...(isInc ? [22, 163, 74] : [220, 38, 38]));
+                    doc.text(tx.type, cType, y + 0.5);
+
+                    sf("bold", 8, ...(isInc ? [22, 163, 74] : [220, 38, 38]));
+                    doc.text(tx.sign + tx.amt + " TL", cAmt, y + 0.5, { align: "right" });
+
+                    hLine(y + 4, 240, 242, 247);
+                    y += 8.5;
+                }
+            }
+
+            /* ── Footer (tum sayfalar) ── */
+            const total = doc.getNumberOfPages();
+            for (let p = 1; p <= total; p++) {
+                doc.setPage(p);
+                doc.setFillColor(247, 248, 252);
+                doc.rect(0, H - 10, W, 10, "F");
+                doc.setDrawColor(220, 224, 232);
+                doc.line(0, H - 10, W, H - 10);
+                sf("normal", 7, 150, 155, 165);
+                doc.text(PDF_META.company + " — " + PDF_META.period + " Raporu", ML, H - 4);
+                doc.text("Sayfa " + p + " / " + total, W - MR, H - 4, { align: "right" });
+            }
+
+            const fn = "finans-raporu-" + PDF_META.period.replace(/\s+/g, "-") + ".pdf";
+            doc.save(fn);
+
+        } catch (e) {
+            console.error(e);
+            alert("PDF olusturulamadi. Konsola bakin.");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF Indir`;
+        }
+    }
+</script>

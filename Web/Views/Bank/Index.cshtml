@@ -1,0 +1,609 @@
+﻿@model IEnumerable<Core.Concrete.Entities.Bank>
+@{
+    ViewBag.Title = "Finans Yönetimi";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    decimal anaPara = ViewBag.TotalIncome ?? 0;
+    decimal toplamGider = ViewBag.TotalExpense ?? 0;
+    decimal netBakiye = anaPara - toplamGider;
+}
+
+<style>
+    .bk-page {
+        padding: 1.5rem 2rem;
+    }
+
+    .bk-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+        .bk-topbar h4 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            color: #333;
+        }
+
+    .bk-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    .bk-stat {
+        background: #fff;
+        border: 0.5px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 14px 18px;
+    }
+
+    .bk-stat-label {
+        font-size: 11px;
+        color: #999;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+    }
+
+    .bk-stat-value {
+        font-size: 22px;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+        .bk-stat-value.green {
+            color: #2d7a3a;
+        }
+
+        .bk-stat-value.red {
+            color: #c0392b;
+        }
+
+    .bk-bank-card {
+        background: #fff;
+        border: 0.5px solid #e0e0e0;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    .bk-bank-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        border-bottom: 0.5px solid #f0f0f0;
+        background: #fafafa;
+    }
+
+    .bk-bank-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+    .bk-btn-group {
+        display: flex;
+        gap: 6px;
+    }
+
+    .bk-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+        border-radius: 8px;
+        border: 0.5px solid #d0d0d0;
+        background: #fff;
+        color: #555;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+        .bk-btn:hover {
+            background: #f5f5f5;
+        }
+
+    .bk-btn-red {
+        border-color: #f5c6c6;
+        color: #c0392b;
+    }
+
+        .bk-btn-red:hover {
+            background: #fff5f5;
+        }
+
+    .bk-bank-body {
+        padding: 14px 18px;
+    }
+
+    .bk-section-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 8px;
+    }
+
+    .bk-account-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 0.5px solid #f5f5f5;
+    }
+
+        .bk-account-row:last-child {
+            border-bottom: none;
+        }
+
+    .bk-account-name {
+        font-size: 13px;
+        color: #555;
+    }
+
+    .bk-account-balance {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+    .bk-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: #e8f5e9;
+        color: #2d7a3a;
+        display: inline-block;
+        margin-top: 3px;
+    }
+
+    .bk-cc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .bk-cc-card {
+        border: 0.5px solid #f5c6c6;
+        border-radius: 10px;
+        padding: 14px;
+        background: #fff9f9;
+    }
+
+    .bk-cc-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 6px;
+    }
+
+    .bk-cc-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: #7b1c1c;
+    }
+
+    .bk-cc-debt {
+        font-size: 18px;
+        font-weight: 500;
+        color: #c0392b;
+        margin-bottom: 6px;
+    }
+
+        .bk-cc-debt small {
+            font-size: 11px;
+            font-weight: 400;
+            color: #e57373;
+        }
+
+    .bk-progress {
+        height: 4px;
+        background: #ffd7d7;
+        border-radius: 2px;
+        margin-bottom: 10px;
+    }
+
+    .bk-progress-fill {
+        height: 100%;
+        background: #e74c3c;
+        border-radius: 2px;
+    }
+
+    .bk-cc-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 10px;
+        margin-bottom: 10px;
+    }
+
+    .bk-cc-meta-item label {
+        font-size: 10px;
+        color: #e57373;
+        display: block;
+    }
+
+    .bk-cc-meta-item span {
+        font-size: 12px;
+        font-weight: 500;
+        color: #7b1c1c;
+    }
+
+    .bk-btn-pay {
+        width: 100%;
+        padding: 7px;
+        font-size: 12px;
+        font-weight: 500;
+        border: 1px solid #e74c3c;
+        color: #c0392b;
+        background: transparent;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .bk-btn-pay:hover {
+            background: #fff0f0;
+        }
+
+    .bk-divider {
+        border: none;
+        border-top: 0.5px solid #f0f0f0;
+        margin: 12px 0;
+    }
+
+    /* Modal */
+    .modal-header {
+        border-bottom: 0.5px solid #f0f0f0;
+    }
+
+    .modal-footer {
+        border-top: 0.5px solid #f0f0f0;
+    }
+
+    .form-label-sm {
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .form-control-sm-custom {
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="bk-page">
+    <div class="bk-topbar">
+        <h4>Finans yönetimi</h4>
+        <button class="bk-btn" onclick="$('#addBankModal').modal('show')" style="background:#1a1a1a;color:#fff;border-color:#1a1a1a;">+ Banka ekle</button>
+    </div>
+
+    <div class="bk-summary">
+        <div class="bk-stat">
+            <div class="bk-stat-label">Toplam gelir</div>
+            <div class="bk-stat-value green">@anaPara.ToString("N2") ₺</div>
+        </div>
+        <div class="bk-stat">
+            <div class="bk-stat-label">Toplam gider</div>
+            <div class="bk-stat-value red">@toplamGider.ToString("N2") ₺</div>
+        </div>
+        <div class="bk-stat">
+            <div class="bk-stat-label">Net bakiye</div>
+            <div class="bk-stat-value @(netBakiye >= 0 ? "green" : "red")">@netBakiye.ToString("N2") ₺</div>
+        </div>
+    </div>
+
+    @foreach (var bank in Model)
+    {
+        <div class="bk-bank-card">
+            <div class="bk-bank-header">
+                <span class="bk-bank-name">@bank.BankName</span>
+                <div class="bk-btn-group">
+                    <button class="bk-btn" onclick="openAccountModal(@bank.Id)">+ Hesap</button>
+                    <button class="bk-btn" onclick="openCardModal(@bank.Id)">+ Kart</button>
+                    <form action="@Url.Action("DeleteBank", "Bank")" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@bank.Id" />
+                        <button type="submit" class="bk-btn bk-btn-red" onclick="return confirm('Bu bankayı ve tüm hesapları/kartları silmek istediğinize emin misiniz?');">Sil</button>
+                    </form>
+                </div>
+            </div>
+            <div class="bk-bank-body">
+
+                @if (bank.BankAccounts != null && bank.BankAccounts.Any())
+                {
+                    <div class="bk-section-label">Banka hesapları</div>
+                    foreach (var acc in bank.BankAccounts)
+                    {
+                        <div class="bk-account-row">
+                            <div>
+                                <div class="bk-account-name">@acc.AccountName</div>
+                                @if (acc.IsIncludedInTotal)
+                                {
+                                    <span class="bk-badge">Ana paraya dahil</span>
+                                }
+                            </div>
+                            <div style="text-align:right">
+                                <div class="bk-account-balance">@acc.Balance.ToString("N2") ₺</div>
+                                <div class="bk-btn-group" style="margin-top:4px;">
+                                    <button class="bk-btn" onclick="openBalanceModal(@acc.Id, '@acc.AccountName', '@acc.Balance.ToString("F2").Replace(",",".")')">Bakiye güncelle</button>
+                                    <form action="@Url.Action("DeleteAccount", "Bank")" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@acc.Id" />
+                                        <button type="submit" class="bk-btn bk-btn-red" onclick="return confirm('Hesabı sil?');">Sil</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (bank.CreditCards != null && bank.CreditCards.Any())
+                {
+                    <hr class="bk-divider" />
+                    <div class="bk-section-label">Kredi kartları</div>
+                    <div class="bk-cc-grid">
+                        @foreach (var card in bank.CreditCards)
+                        {
+                            double usageRatio = card.CardLimit > 0 ? (double)(card.CurrentDebt / card.CardLimit) * 100 : 0;
+                            <div class="bk-cc-card">
+                                <div class="bk-cc-top">
+                                    <span class="bk-cc-name">@card.CardName</span>
+                                    <form action="@Url.Action("DeleteCard", "Bank")" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@card.Id" />
+                                        <button type="submit" class="bk-btn bk-btn-red" style="padding:2px 8px;font-size:11px;" onclick="return confirm('Kartı sil?');">Sil</button>
+                                    </form>
+                                </div>
+                                <div class="bk-cc-debt">@card.CurrentDebt.ToString("N2") ₺ <small>borç</small></div>
+                                <div class="bk-progress">
+                                    <div class="bk-progress-fill" style="width:@(Math.Min(usageRatio, 100).ToString("F0", System.Globalization.CultureInfo.InvariantCulture))%"></div>
+                                </div>
+                                <div class="bk-cc-meta">
+                                    <div class="bk-cc-meta-item">
+                                        <label>Limit</label>
+                                        <span>@card.CardLimit.ToString("N0") ₺</span>
+                                    </div>
+                                    @if (card.ClosingDay > 0)
+                                    {
+                                        <div class="bk-cc-meta-item">
+                                            <label>Hesap kesim</label>
+                                            <span>Her ayın @card.ClosingDay.'i</span>
+                                        </div>
+                                    }
+                                    @if (card.DueDate.HasValue)
+                                    {
+                                        <div class="bk-cc-meta-item">
+                                            <label>Son ödeme</label>
+                                            <span>@card.DueDate.Value.ToString("dd MMM", new System.Globalization.CultureInfo("tr-TR"))</span>
+                                        </div>
+                                    }
+                                    @if (card.InterestRate > 0)
+                                    {
+                                        <div class="bk-cc-meta-item">
+                                            <label>Faiz oranı</label>
+                                            <span>%@card.InterestRate.ToString("F2")</span>
+                                        </div>
+                                    }
+                                </div>
+                                <button class="bk-btn-pay" onclick="openPayDebtModal(@card.Id, '@card.CurrentDebt.ToString("F2").Replace(",",".")')">Borç öde</button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+@* ==================== MODALS ====================  *@
+
+
+@* Borç Öde  *@
+<div class="modal fade" id="payDebtModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Borç öde</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="@Url.Action("PayCreditCardDebt", "Bank")" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="cardId" id="payCardId" />
+                    <div class="form-group">
+                        <label class="form-label-sm">Ödenecek tutar (₺)</label>
+                        <input type="number" name="amount" id="payAmount" class="form-control" step="0.01" min="0.01" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label-sm">Ödeme kaynağı</label>
+                        <select name="fromAccountId" class="form-control" required>
+                            <option value="-1">💰 Ana para (@anaPara.ToString("N2") ₺)</option>
+                            @foreach (var b in Model)
+                            {
+                                foreach (var a in b.BankAccounts)
+                                {
+                                    <option value="@a.Id">@b.BankName — @a.AccountName (@a.Balance.ToString("N2") ₺)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Öde</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Banka Ekle  *@
+<div class="modal fade" id="addBankModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Banka ekle</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="@Url.Action("AddBank", "Bank")" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label-sm">Banka adı</label>
+                        <input type="text" name="BankName" class="form-control" placeholder="Örn: Garanti BBVA" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Hesap Ekle  *@
+<div class="modal fade" id="addAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hesap ekle</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="@Url.Action("AddAccount", "Bank")" method="post">
+                <input type="hidden" name="BankId" id="modalBankIdAccount" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label-sm">Hesap adı</label>
+                        <input type="text" name="AccountName" class="form-control" placeholder="Örn: Maaş hesabı" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label-sm">Açılış bakiyesi (₺)</label>
+                        <input type="number" name="Balance" class="form-control" placeholder="0.00" step="0.01" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="isIncludedInTotal" name="IsIncludedInTotal" value="true" checked />
+                            <label class="custom-control-label" for="isIncludedInTotal">Ana paraya dahil et</label>
+                        </div>
+                        <small class="text-muted" style="font-size:11px;">Bu hesabın bakiyesi net bakiye hesaplamalarına eklensin mi?</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-success btn-sm">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Kart Ekle  *@
+<div class="modal fade" id="addCardModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kredi kartı ekle</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="@Url.Action("AddCreditCard", "Bank")" method="post">
+                <input type="hidden" name="BankId" id="modalBankIdCard" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label-sm">Kart adı</label>
+                        <input type="text" name="CardName" class="form-control" placeholder="Örn: Bonus kart" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label-sm">Kart limiti (₺)</label>
+                                <input type="number" name="CardLimit" class="form-control" placeholder="0.00" step="0.01" min="0" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label-sm">Güncel borç (₺)</label>
+                                <input type="number" name="CurrentDebt" class="form-control" placeholder="0.00" step="0.01" min="0" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label-sm">Hesap kesim günü</label>
+                                <input type="number" name="ClosingDay" class="form-control" placeholder="1 - 31" min="1" max="31" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label-sm">Son ödeme tarihi</label>
+                                <input type="date" name="DueDate" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label-sm">Gecikme faiz oranı (%)</label>
+                        <input type="number" name="InterestRate" class="form-control" placeholder="Örn: 4.50" step="0.01" min="0" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* Bakiye Güncelle  *@
+<div class="modal fade" id="balanceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bakiye güncelle — <span id="balAccountName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="@Url.Action("UpdateAccountBalance", "Bank")" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="accountId" id="balAccountId" />
+                    <div class="form-group">
+                        <label class="form-label-sm">Yeni bakiye (₺)</label>
+                        <input type="number" name="amount" id="balAmount" class="form-control" step="0.01" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-warning btn-sm">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openAccountModal(bankId) {
+        $('#modalBankIdAccount').val(bankId);
+        $('#addAccountModal').modal('show');
+    }
+    function openCardModal(bankId) {
+        $('#modalBankIdCard').val(bankId);
+        $('#addCardModal').modal('show');
+    }
+    function openBalanceModal(accountId, accountName, balance) {
+        $('#balAccountId').val(accountId);
+        $('#balAccountName').text(accountName);
+        $('#balAmount').val(balance);
+        $('#balanceModal').modal('show');
+    }
+    function openPayDebtModal(cardId, currentDebt) {
+        $('#payCardId').val(cardId);
+        $('#payAmount').val(currentDebt);
+        $('#payDebtModal').modal('show');
+    }
+</script>

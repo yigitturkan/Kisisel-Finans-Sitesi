@@ -1,0 +1,50 @@
+﻿@model Web.Models.EditProfileViewModel
+@{
+    ViewBag.Title = "Profil Düzenle";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container-xxl container-p-y">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h5 class="mb-0 text-white"><i class="bx bx-user-edit me-2"></i> Bilgilerimi Güncelle</h5>
+                </div>
+                <div class="card-body p-4">
+                    @using (Html.BeginForm("EditProfile", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4 text-center">
+                            <label class="form-label d-block fw-bold">Profil Fotoğrafı Seç</label>
+                            <input type="file" name="ProfileImage" class="form-control" accept="image/*" />
+                            <small class="text-muted">PNG, JPG veya JPEG (Max 2MB)</small>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ad</label>
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Soyad</label>
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Doğum Tarihi</label>
+                            @Html.TextBoxFor(m => m.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        </div>
+
+                        <div class="d-flex gap-2 pt-3">
+                            <button type="submit" class="btn btn-success w-100">Değişiklikleri Kaydet</button>
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">İptal</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

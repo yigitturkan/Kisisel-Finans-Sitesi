@@ -1,0 +1,57 @@
+﻿@model Web.Models.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewBag.Title = "Kayıt Ol";
+}
+
+<section class="bg-gradient d-flex align-items-center justify-content-center min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <h2 class="card-title fw-bold text-center mb-4">Kayıt Ol</h2>
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        if (!ViewData.ModelState.IsValid)
+                        {
+                            @Html.ValidationSummary(false, "Lütfen aşağıdaki hataları düzeltin:", new { @class = "alert alert-danger small mb-3" })
+                        }
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Email, "Email", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Eposta adresinizi girin..." })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Password, "Şifre", new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "*****" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.ConfirmPassword, "Tekrar Şifre", new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "*****" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Kayıt Ol</button>
+                        </div>
+
+                        <p class="text-center mt-3 small">
+                            Hesabınız var mı?
+                            @Html.ActionLink("Giriş Yap", "Login", "Account", null, new { @class = "text-decoration-none" })
+                        </p>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
